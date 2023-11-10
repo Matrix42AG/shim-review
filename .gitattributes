@@ -1,0 +1,10 @@
+# attributes for binary files from this directory
+
+Dockerfile              text eol=lf
+
+*.sh                    text eol=lf
+*.md                    text eol=lf
+
+patches/*               text eol=lf
+
+
