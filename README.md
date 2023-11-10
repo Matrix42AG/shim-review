@@ -136,7 +136,9 @@ GRUB bootloader is not used
 ### Were old shims hashes provided to Microsoft for verification and to be added to future DBX updates?
 ### Does your new chain of trust disallow booting old GRUB2 builds affected by the CVEs?
 *******************************************************************************
-We're still using older shim versions 
+Our earlier software versions continue to employ the previous build shim, and it is not possible to include it as a DBX exception.
+We have also SBAT support.
+GRUB bootloader is not used.
 
 *******************************************************************************
 ### If your boot chain of trust includes a Linux kernel:
@@ -165,7 +167,7 @@ We do not employ ephemeral keys. Our practice does not involve granting shell ac
 ### If there are allow-listed hashes please provide exact binaries for which hashes are created via file sharing service, available in public with anonymous access for verification.
 *******************************************************************************
 We don't use hashes to verify our own efi binaries.
-We use VENDOR_CERT_FILE with one certificate that will be used to verify our efi binearies.
+We use VENDOR_CERT_FILE with one certificate that will be used to verify all our efi binaries.
 
 *******************************************************************************
 ### If you are re-using a previously used (CA) certificate, you will need to add the hashes of the previous GRUB2 binaries exposed to the CVEs to vendor_dbx in shim in order to prevent GRUB2 from being able to chainload those older GRUB2 binaries. If you are changing to a new (CA) certificate, this does not apply.
@@ -190,8 +192,8 @@ build.log
 ### What changes were made since your SHIM was last signed?
 *******************************************************************************
 `Update shim version to 15.7`
-We're not macking changes to the shim, we download the source and build it using the option for VENDOR_CERT_FILE and DEFAULT_LOADER.
-We're updating the vendor certificate because the last certificate has expried.
+We're not making changes to the shim, we download the source and build it using the option for VENDOR_CERT_FILE and DEFAULT_LOADER.
+We're updating the vendor certificate because the last certificate has expired.
 
 *******************************************************************************
 ### What is the SHA256 hash of your final SHIM binary?
@@ -201,19 +203,19 @@ f75973853cbdbb95190efdc61fd7a044fc6dd61f0138fbeaa0e3ec44d69211ff (sha256sum shim
 *******************************************************************************
 ### How do you manage and protect the keys used in your SHIM?
 *******************************************************************************
-The private key, associated with the vendor certificate build with the shim, is saved on an external USB stick that is only available to our internal build machine.
+The private key, associated with the vendor certificate build with the shim, is saved on an Hardware Security Module that is attached and only available to our internal build machine.
 
 *******************************************************************************
 ### Do you use EV certificates as embedded certificates in the SHIM?
 *******************************************************************************
-No. Our certificate is a Code Signing certificate.
+Yes.
 
 *******************************************************************************
 ### Do you add a vendor-specific SBAT entry to the SBAT section in each binary that supports SBAT metadata ( grub2, fwupd, fwupdate, shim + all child shim binaries )?
 ### Please provide exact SBAT entries for all SBAT binaries you are booting or planning to boot directly through shim.
 ### Where your code is only slightly modified from an upstream vendor's, please also preserve their SBAT entries to simplify revocation.
 *******************************************************************************
-shim.egosecure,1,Matrix42 GmbH,shim,15.4,https://matrix42.com
+shim.egosecure,1,Matrix42 GmbH,shim,15.7,https://matrix42.com
 
 *******************************************************************************
 ### Which modules are built into your signed grub image?
@@ -229,8 +231,8 @@ We have a custom boot loader.
 *******************************************************************************
 ### If your SHIM launches any other components, please provide further details on what is launched.
 *******************************************************************************
-The shim loads our custom loader (the DEFAULT_LOADER provided to the shim). We use a custom second-state loader. According to business logic, the loader can start Microsoft Windows Boot Manager or own Linux Kernel image. All of the files we load are code-signed with the vendor certificate provider to the shim.
-To start the loader we create own EFI boot entry.  
+The shim loads our custom loader (the DEFAULT_LOADER provided to the shim). We use a custom second-stage loader. According to business logic, the loader can start Microsoft Windows Boot Manager or own Linux Kernel image. All of the files we load are code-signed with the EV vendor certificate provided to the shim.
+To start the loader we create our own EFI boot entry.  
 
 *******************************************************************************
 ### If your GRUB2 launches any other binaries that are not the Linux kernel in SecureBoot mode, please provide further details on what is launched and how it enforces Secureboot lockdown.
@@ -240,7 +242,7 @@ GRUB bootloader is not used.
 *******************************************************************************
 ### How do the launched components prevent execution of unauthenticated code?
 *******************************************************************************
-Yes. all our components are signed with our vendor certificate.
+All our components are signed with our EV vendor certificate.
 
 *******************************************************************************
 ### Does your SHIM load any loaders that support loading unsigned kernels (e.g. GRUB)?
@@ -250,7 +252,11 @@ No.
 *******************************************************************************
 ### What kernel are you using? Which patches does it includes to enforce Secure Boot?
 *******************************************************************************
-Linux kernel 5.5.7, which has the all the required patches to enforce the secure boot
+Linux kernel 5.5.7, which has the all the required patches to enforce the secure boot.
+
+We are currently running Kernel version 5.5.7. Our intention is to upgrade to the latest kernel version and apply the most recent security patches. However, our current priority is to address the issue involving a certificate mismatch under the shim. Resolving this problem is crucial for unblocking our clients.
+
+It's worth noting that we only utilize the Linux kernel to display a login dialog for user authentication, allowing them to proceed to boot into Windows. We do not grant shell access or permit any actions that involve modifying kernel modules or similar activities.
 
 *******************************************************************************
 ### Add any additional information you think we may need to validate this shim.
