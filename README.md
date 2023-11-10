@@ -193,7 +193,7 @@ build.log
 *******************************************************************************
 `Update shim version to 15.7`
 We're not making changes to the shim, we download the source and build it using the option for VENDOR_CERT_FILE and DEFAULT_LOADER.
-We're updating the vendor certificate because the last certificate has expired.
+We're updating the vendor EV certificate because the last certificate has expired.
 
 *******************************************************************************
 ### What is the SHA256 hash of your final SHIM binary?
@@ -203,7 +203,7 @@ f75973853cbdbb95190efdc61fd7a044fc6dd61f0138fbeaa0e3ec44d69211ff (sha256sum shim
 *******************************************************************************
 ### How do you manage and protect the keys used in your SHIM?
 *******************************************************************************
-The private key, associated with the vendor certificate build with the shim, is saved on an Hardware Security Module that is attached and only available to our internal build machine.
+The private key, associated with the vendor EV certificate build with the shim, is saved on an Hardware Security Module that is attached and only available to our internal build machine.
 
 *******************************************************************************
 ### Do you use EV certificates as embedded certificates in the SHIM?
@@ -242,7 +242,7 @@ GRUB bootloader is not used.
 *******************************************************************************
 ### How do the launched components prevent execution of unauthenticated code?
 *******************************************************************************
-All our components are signed with our EV vendor certificate.
+All our components are signed with our vendor EV certificate.
 
 *******************************************************************************
 ### Does your SHIM load any loaders that support loading unsigned kernels (e.g. GRUB)?
