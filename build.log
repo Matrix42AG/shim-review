@@ -1,47 +1,47 @@
 ===================================
 COPY SHIM 15.7 SOURCES
 ===================================
---2023-11-10 11:10:18--  https://github.com/rhboot/shim/releases/download/15.7/shim-15.7.tar.bz2
-Resolving github.com (github.com)... 140.82.121.3, ::ffff:140.82.121.3
-Connecting to github.com (github.com)|140.82.121.3|:443... connected.
+--2023-11-20 09:50:54--  https://github.com/rhboot/shim/releases/download/15.7/shim-15.7.tar.bz2
+Resolving github.com (github.com)... 140.82.121.4, ::ffff:140.82.121.4
+Connecting to github.com (github.com)|140.82.121.4|:443... connected.
 HTTP request sent, awaiting response... 302 Found
-Location: https://objects.githubusercontent.com/github-production-release-asset-2e65be/3996476/c417b0cc-a277-43ea-b275-fe5fe39bf382?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20231110%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231110T111018Z&X-Amz-Expires=300&X-Amz-Signature=8a19cc4a7ac23e55cfa19ece805cc015dceaaf8a3b3f0061537ca2e9d0584e74&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=3996476&response-content-disposition=attachment%3B%20filename%3Dshim-15.7.tar.bz2&response-content-type=application%2Foctet-stream [following]
---2023-11-10 11:10:18--  https://objects.githubusercontent.com/github-production-release-asset-2e65be/3996476/c417b0cc-a277-43ea-b275-fe5fe39bf382?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20231110%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231110T111018Z&X-Amz-Expires=300&X-Amz-Signature=8a19cc4a7ac23e55cfa19ece805cc015dceaaf8a3b3f0061537ca2e9d0584e74&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=3996476&response-content-disposition=attachment%3B%20filename%3Dshim-15.7.tar.bz2&response-content-type=application%2Foctet-stream
-Resolving objects.githubusercontent.com (objects.githubusercontent.com)... 185.199.111.133, 185.199.110.133, 185.199.108.133, ...
-Connecting to objects.githubusercontent.com (objects.githubusercontent.com)|185.199.111.133|:443... connected.
+Location: https://objects.githubusercontent.com/github-production-release-asset-2e65be/3996476/c417b0cc-a277-43ea-b275-fe5fe39bf382?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20231120%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231120T095055Z&X-Amz-Expires=300&X-Amz-Signature=ff5792d41c9d77a9fdf287873a04d736517f6cf0199c3fd98f9e86ec74c870b1&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=3996476&response-content-disposition=attachment%3B%20filename%3Dshim-15.7.tar.bz2&response-content-type=application%2Foctet-stream [following]
+--2023-11-20 09:50:55--  https://objects.githubusercontent.com/github-production-release-asset-2e65be/3996476/c417b0cc-a277-43ea-b275-fe5fe39bf382?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20231120%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20231120T095055Z&X-Amz-Expires=300&X-Amz-Signature=ff5792d41c9d77a9fdf287873a04d736517f6cf0199c3fd98f9e86ec74c870b1&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=3996476&response-content-disposition=attachment%3B%20filename%3Dshim-15.7.tar.bz2&response-content-type=application%2Foctet-stream
+Resolving objects.githubusercontent.com (objects.githubusercontent.com)... ::ffff:185.199.111.133, ::ffff:185.199.108.133, ::ffff:185.199.109.133, ...
+Connecting to objects.githubusercontent.com (objects.githubusercontent.com)|::ffff:185.199.111.133|:443... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 1334863 (1.3M) [application/octet-stream]
 Saving to: 'shim-15.7.tar.bz2'
 
-     0K .......... .......... .......... .......... ..........  3% 1.87M 1s
-    50K .......... .......... .......... .......... ..........  7%  728K 1s
-   100K .......... .......... .......... .......... .......... 11% 8.32M 1s
-   150K .......... .......... .......... .......... .......... 15% 9.16M 1s
-   200K .......... .......... .......... .......... .......... 19% 1.57M 1s
-   250K .......... .......... .......... .......... .......... 23% 4.32M 0s
-   300K .......... .......... .......... .......... .......... 26% 2.28M 0s
-   350K .......... .......... .......... .......... .......... 30% 2.54M 0s
-   400K .......... .......... .......... .......... .......... 34% 3.87M 0s
-   450K .......... .......... .......... .......... .......... 38% 3.81M 0s
-   500K .......... .......... .......... .......... .......... 42% 1.76M 0s
-   550K .......... .......... .......... .......... .......... 46% 6.76M 0s
-   600K .......... .......... .......... .......... .......... 49% 1.93M 0s
-   650K .......... .......... .......... .......... .......... 53% 6.08M 0s
-   700K .......... .......... .......... .......... .......... 57% 3.28M 0s
-   750K .......... .......... .......... .......... .......... 61% 3.94M 0s
-   800K .......... .......... .......... .......... .......... 65% 3.02M 0s
-   850K .......... .......... .......... .......... .......... 69% 3.36M 0s
-   900K .......... .......... .......... .......... .......... 72% 4.70M 0s
-   950K .......... .......... .......... .......... .......... 76% 3.28M 0s
-  1000K .......... .......... .......... .......... .......... 80% 4.56M 0s
-  1050K .......... .......... .......... .......... .......... 84% 2.99M 0s
-  1100K .......... .......... .......... .......... .......... 88% 2.06M 0s
-  1150K .......... .......... .......... .......... .......... 92% 10.7M 0s
-  1200K .......... .......... .......... .......... .......... 95% 2.35M 0s
-  1250K .......... .......... .......... .......... .......... 99% 4.97M 0s
-  1300K ...                                                   100% 6823G=0.5s
+     0K .......... .......... .......... .......... ..........  3% 1.19M 1s
+    50K .......... .......... .......... .......... ..........  7% 4.00M 1s
+   100K .......... .......... .......... .......... .......... 11% 2.20M 1s
+   150K .......... .......... .......... .......... .......... 15% 6.03M 0s
+   200K .......... .......... .......... .......... .......... 19% 2.16M 0s
+   250K .......... .......... .......... .......... .......... 23% 9.00M 0s
+   300K .......... .......... .......... .......... .......... 26% 10.5M 0s
+   350K .......... .......... .......... .......... .......... 30% 12.2M 0s
+   400K .......... .......... .......... .......... .......... 34% 9.65M 0s
+   450K .......... .......... .......... .......... .......... 38% 2.89M 0s
+   500K .......... .......... .......... .......... .......... 42% 5.86M 0s
+   550K .......... .......... .......... .......... .......... 46% 10.9M 0s
+   600K .......... .......... .......... .......... .......... 49% 12.3M 0s
+   650K .......... .......... .......... .......... .......... 53% 14.1M 0s
+   700K .......... .......... .......... .......... .......... 57% 12.2M 0s
+   750K .......... .......... .......... .......... .......... 61% 11.3M 0s
+   800K .......... .......... .......... .......... .......... 65% 10.6M 0s
+   850K .......... .......... .......... .......... .......... 69% 14.1M 0s
+   900K .......... .......... .......... .......... .......... 72% 9.96M 0s
+   950K .......... .......... .......... .......... .......... 76% 11.5M 0s
+  1000K .......... .......... .......... .......... .......... 80% 12.9M 0s
+  1050K .......... .......... .......... .......... .......... 84% 14.7M 0s
+  1100K .......... .......... .......... .......... .......... 88% 12.2M 0s
+  1150K .......... .......... .......... .......... .......... 92% 12.3M 0s
+  1200K .......... .......... .......... .......... .......... 95% 11.3M 0s
+  1250K .......... .......... .......... .......... .......... 99% 13.7M 0s
+  1300K ...                                                   100% 6823G=0.2s
 
-2023-11-10 11:10:19 (2.82 MB/s) - 'shim-15.7.tar.bz2' saved [1334863/1334863]
+2023-11-20 09:50:55 (6.04 MB/s) - 'shim-15.7.tar.bz2' saved [1334863/1334863]
 
 shim-15.7/
 shim-15.7/.clang-format
@@ -1127,6 +1127,10 @@ COPY CERTIFICATE AND SBAT FILES TO SHIM BUILD DIRECTORY
 ===================================
 APPLY PATCHES
 ===================================
+patching file BUILDING
+patching file Make.defaults
+patching file Makefile
+patching file post-process-pe.c
 patching file load-options.c
 ===================================
 BUILD SHIM-15.7 FROM SOURCES
@@ -1715,7 +1719,9 @@ objcopy -D -j .text -j .sdata -j .data -j .data.ident \
 	-j .rela* -j .dyn -j .reloc -j .eh_frame \
 	-j .vendor_cert -j .sbat -j .sbatlevel \
 	--target efi-app-x86_64 shimx64.so shimx64.efi
-./post-process-pe -vv shimx64.efi
+./post-process-pe -vv  shimx64.efi
+set_dll_characteristics():354: Updating DLL Characteristics from 0x0000 to 0x0100
+fix_checksum():412: Updating checksum from 0x000ee7b4 to 0x000ee8b4
 objcopy -D -j .text -j .sdata -j .data \
 	-j .dynamic -j .rodata -j .rel* \
 	-j .rela* -j .dyn -j .reloc -j .eh_frame -j .sbat \
@@ -1751,13 +1757,17 @@ objcopy -D -j .text -j .sdata -j .data -j .data.ident \
 	-j .rela* -j .dyn -j .reloc -j .eh_frame \
 	-j .vendor_cert -j .sbat -j .sbatlevel \
 	--target efi-app-x86_64 mmx64.so mmx64.efi
-./post-process-pe -vv mmx64.efi
+./post-process-pe -vv  mmx64.efi
+set_dll_characteristics():354: Updating DLL Characteristics from 0x0000 to 0x0100
+fix_checksum():412: Updating checksum from 0x000df550 to 0x000df650
 objcopy -D -j .text -j .sdata -j .data -j .data.ident \
 	-j .dynamic -j .rodata -j .rel* \
 	-j .rela* -j .dyn -j .reloc -j .eh_frame \
 	-j .vendor_cert -j .sbat -j .sbatlevel \
 	--target efi-app-x86_64 fbx64.so fbx64.efi
-./post-process-pe -vv fbx64.efi
+./post-process-pe -vv  fbx64.efi
+set_dll_characteristics():354: Updating DLL Characteristics from 0x0000 to 0x0100
+fix_checksum():412: Updating checksum from 0x00019550 to 0x00019650
 'shim-15.7/shimx64.efi' -> 'shimx64.efi-docker'
 ===================================
 COMPARE SHIM FILES
@@ -1767,5 +1777,5 @@ shimx64.efi-docker - reproduced shim build binary file
 diff shim.efi shimx64.efi-docker -s
 Files shim.efi and shimx64.efi-docker are identical
 sha256sum shim.efi shimx64.efi-docker
-f75973853cbdbb95190efdc61fd7a044fc6dd61f0138fbeaa0e3ec44d69211ff  shim.efi
-f75973853cbdbb95190efdc61fd7a044fc6dd61f0138fbeaa0e3ec44d69211ff  shimx64.efi-docker
+06671d48f246567b2722cb4268562fc5f80f55647e800cfceeffab1000e877b0  shim.efi
+06671d48f246567b2722cb4268562fc5f80f55647e800cfceeffab1000e877b0  shimx64.efi-docker

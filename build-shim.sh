@@ -29,7 +29,8 @@ cd $SRC_DIR
 echo ===================================
 echo           APPLY PATCHES
 echo ===================================
-patch < ../patches/0001-Fix-failed-to-load-image-with-invalid-parameter.patch
+patch < ../patches/0001-Enable-the-NX-compatibility-flag-by-default.patch
+patch < ../patches/0002-Fix-failed-to-load-image-with-invalid-parameter.patch
 
 echo ===================================
 echo     BUILD SHIM-15.7 FROM SOURCES

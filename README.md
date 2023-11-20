@@ -198,7 +198,7 @@ We're updating the vendor EV certificate because the last certificate has expire
 *******************************************************************************
 ### What is the SHA256 hash of your final SHIM binary?
 *******************************************************************************
-f75973853cbdbb95190efdc61fd7a044fc6dd61f0138fbeaa0e3ec44d69211ff (sha256sum shim.efi)
+06671d48f246567b2722cb4268562fc5f80f55647e800cfceeffab1000e877b0 (sha256sum shim.efi)
 
 *******************************************************************************
 ### How do you manage and protect the keys used in your SHIM?
@@ -262,4 +262,4 @@ It's worth noting that we only utilize the Linux kernel to display a login dialo
 ### Add any additional information you think we may need to validate this shim.
 *******************************************************************************
 file: shim.efi  
-sha256: f75973853cbdbb95190efdc61fd7a044fc6dd61f0138fbeaa0e3ec44d69211ff
+sha256: 06671d48f246567b2722cb4268562fc5f80f55647e800cfceeffab1000e877b0
