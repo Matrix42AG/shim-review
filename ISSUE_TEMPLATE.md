@@ -38,7 +38,7 @@ https://github.com/Matrix42AG/shim-review
 *******************************************************************************
 ### What is the SHA256 hash of your final SHIM binary?
 *******************************************************************************
-06671d48f246567b2722cb4268562fc5f80f55647e800cfceeffab1000e877b0 
+50501d79a8ecc1648ed4418e5a35207feb08b797f4387ab1876e7e29abdc0b51 
 
 *******************************************************************************
 ### What is the link to your previous shim review request (if any, otherwise N/A)?
