@@ -197,7 +197,6 @@ We use VENDOR_CERT_FILE with one certificate that will be used to verify all our
 ### Please describe your strategy.
 *******************************************************************************
 We're changing to a new CA certificate.
-GRUB bootloader is not used.
 
 *******************************************************************************
 ### What OS and toolchain must we use to reproduce this build?  Include where to find it, etc.  We're going to try to reproduce your build as closely as possible to verify that it's really a build of the source tree you tell us it is, so these need to be fairly thorough. At the very least include the specific versions of gcc, binutils, and gnu-efi which were used, and where to find those binaries.
@@ -241,7 +240,7 @@ from Fedora or Debian), please preserve the SBAT entry from those distributions
 and only append your own. More information on how SBAT works can be found
 [here](https://github.com/rhboot/shim/blob/main/SBAT.md).
 *******************************************************************************
-shim.egosecure,1,Matrix42 GmbH,shim,15.7,https://matrix42.com
+shim.egosecure,1,Matrix42 GmbH,shim,15.8,https://matrix42.com
 
 *******************************************************************************
 ### If shim is loading GRUB2 bootloader, which modules are built into your signed GRUB2 image?
@@ -251,13 +250,12 @@ GRUB bootloader is not used.
 *******************************************************************************
 ### If you are using systemd-boot on arm64 or riscv, is the fix for [unverified Devicetree Blob loading](https://github.com/systemd/systemd/security/advisories/GHSA-6m6p-rjcq-334c) included?
 *******************************************************************************
-GRUB bootloader is not used.
 We have a custom boot loader.
 
 *******************************************************************************
 ### What is the origin and full version number of your bootloader (GRUB2 or systemd-boot or other)?
 *******************************************************************************
-[your text here]
+We have a custom boot loader.
 
 *******************************************************************************
 ### If your SHIM launches any other components, please provide further details on what is launched.
