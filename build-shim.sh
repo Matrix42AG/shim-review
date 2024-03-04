@@ -8,14 +8,14 @@ exec 2>&1
 CERT_FILE=matrix42.public.ev.cer
 SBAT_FILE=sbat.egosecure.csv
 
-SRC_DIR=shim-15.7
+SRC_DIR=shim-15.8
 
 echo ===================================
-echo         COPY SHIM 15.7 SOURCES
+echo         COPY SHIM 15.8 SOURCES
 echo ===================================
-wget https://github.com/rhboot/shim/releases/download/15.7/shim-15.7.tar.bz2
-tar xjvf shim-15.7.tar.bz2
-rm shim-15.7.tar.bz2
+wget https://github.com/rhboot/shim/releases/download/15.8/shim-15.8.tar.bz2
+tar xjvf shim-15.8.tar.bz2
+rm shim-15.8.tar.bz2
 
 
 echo ======================================================================
@@ -29,12 +29,10 @@ cd $SRC_DIR
 echo ===================================
 echo           APPLY PATCHES
 echo ===================================
-patch < ../patches/0001-Enable-the-NX-compatibility-flag-by-default.patch
-patch < ../patches/0002-Fix-failed-to-load-image-with-invalid-parameter.patch
-patch -p 1 < ../patches/0003-buggy-binutils.patch
+patch -p 1 < ../patches/0001-bypass_boot_options.patch
 
 echo ===================================
-echo     BUILD SHIM-15.7 FROM SOURCES
+echo     BUILD SHIM-15.8 FROM SOURCES
 echo ===================================
 export VENDOR_CERT_FILE=$CERT_FILE
 export DEFAULT_LOADER="\\\\\\\\esbootmg.efi"

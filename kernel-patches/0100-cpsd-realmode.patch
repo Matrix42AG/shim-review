@@ -1,0 +1,18 @@
+diff --git a/arch/x86/kernel/reboot.c b/arch/x86/kernel/reboot.c
+index 830425e6d..cb7cbad8f 100644
+--- a/arch/x86/kernel/reboot.c
++++ b/arch/x86/kernel/reboot.c
+@@ -128,11 +128,10 @@ void __noreturn machine_real_restart(unsigned int type)
+ #endif
+ 	unreachable();
+ }
+-#ifdef CONFIG_APM_MODULE
++/********** <b> ES PATCH **********/
+ EXPORT_SYMBOL(machine_real_restart);
+-#endif
+ STACK_FRAME_NON_STANDARD(machine_real_restart);
+-
++/********** <e> ES PATCH **********/
+ /*
+  * Some Apple MacBook and MacBookPro's needs reboot=p to be able to reboot
+  */

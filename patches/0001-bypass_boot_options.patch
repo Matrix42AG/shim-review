@@ -1,0 +1,18 @@
+diff --git a/shim.c b/shim.c
+index 633163a..38fc58e 100644
+--- a/shim.c
++++ b/shim.c
+@@ -1308,11 +1308,13 @@ EFI_STATUS set_second_stage (EFI_HANDLE image_handle)
+ 	}
+ #endif
+ 
++#if 0
+ 	efi_status = parse_load_options(li);
+ 	if (EFI_ERROR(efi_status)) {
+ 		perror (L"Failed to get load options: %r\n", efi_status);
+ 		return efi_status;
+ 	}
++#endif
+ 
+ 	return EFI_SUCCESS;
+ }

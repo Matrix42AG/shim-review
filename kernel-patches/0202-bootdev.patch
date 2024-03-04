@@ -1,0 +1,327 @@
+diff --git a/block/early-lookup.c b/block/early-lookup.c
+index 3effbd0d3..408c8c025 100644
+--- a/block/early-lookup.c
++++ b/block/early-lookup.c
+@@ -314,3 +314,91 @@ void __init printk_all_partitions(void)
+ 	}
+ 	class_dev_iter_exit(&iter);
+ }
++
++/********** <e> ES PATCH **********/
++
++bool __init es_find_partition(unsigned long part_start, unsigned long part_length, int part_no, char **part_name)
++{
++    struct class_dev_iter iter;
++    struct device *dev;
++    bool ret = false;
++
++    printk(">> ES: es_find_partition (%lu - %lu Part(%d) Name(%s). Skip PartNo.):\n", part_start, part_length, part_no, *part_name);
++
++    class_dev_iter_init(&iter, &block_class, NULL, &disk_type);
++    while ((dev = class_dev_iter_next(&iter))) {
++        struct gendisk *disk = dev_to_disk(dev);
++		struct block_device *part;
++        char devt_buf[BDEVT_SIZE];
++		unsigned long idx;
++
++        /*
++         * Don't show empty devices or things that have been
++         * suppressed
++         */
++        if (get_capacity(disk) == 0 ||
++            (disk->flags & GENHD_FL_HIDDEN))
++            continue;
++
++        /*
++         * Note, unlike /proc/partitions, I am showing the
++         * numbers in hex - the same format as the root=
++         * option takes.
++         */
++		rcu_read_lock();
++		xa_for_each(&disk->part_tbl, idx, part) {
++			if (!bdev_nr_sectors(part))
++				continue;
++			
++			bool is_part0 =  part == disk->part0;
++			printk("%s%s %10llu %pg %s",
++			       is_part0 ? "  T" : " F",
++			       bdevt_str(part->bd_dev, devt_buf),
++			       bdev_nr_sectors(part) >> 1, part,
++			       part->bd_meta_info ?
++					part->bd_meta_info->uuid : " xx");
++
++			
++			if (is_part0)
++			{
++				if (dev->parent && dev->parent->driver)
++					printk(" driver: %s\n", dev->parent->driver->name);
++				else
++					printk("\n");
++			}
++            else
++            {
++				char current_part_name[BDEVT_SIZE];
++				snprintf(current_part_name, sizeof(current_part_name), "%pg", part);
++
++                if (part_start == get_start_sect(part) && part_length == bdev_nr_sectors(part))
++                {
++                    printk("ES FDE Partition \n");
++
++                    strcpy(*part_name, "/dev/");
++                    strcat(*part_name, current_part_name);
++                    ret = true;
++                }
++
++                printk(" (driver?)\n");
++            }
++        }
++        rcu_read_unlock();
++    }
++    class_dev_iter_exit(&iter);
++
++    return ret;
++}
++
++/********** <e> ES PATCH **********/
+\ No newline at end of file
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index eef450f25..f424a8e93 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -1503,7 +1503,13 @@ void sync_bdevs(bool wait);
+ void bdev_statx_dioalign(struct inode *inode, struct kstat *stat);
+ void printk_all_partitions(void);
+ int __init early_lookup_bdev(const char *pathname, dev_t *dev);
++/********** <b> ES PATCH **********/
++extern bool __init es_find_partition(unsigned long part_start, unsigned long part_length, int part_no, char **part_name);
++/********** <e> ES PATCH **********/
+ #else
++	
++
++
+ static inline void invalidate_bdev(struct block_device *bdev)
+ {
+ }
+@@ -1524,6 +1530,9 @@ static inline void bdev_statx_dioalign(struct inode *inode, struct kstat *stat)
+ static inline void printk_all_partitions(void)
+ {
+ }
++static inline bool __init es_find_partition(unsigned long part_start, unsigned long part_length, int part_no, char **part_name)
++{
++}
+ static inline int early_lookup_bdev(const char *pathname, dev_t *dev)
+ {
+ 	return -EINVAL;
+diff --git a/init/do_mounts.c b/init/do_mounts.c
+index 5dfd30b13..dba8cb31d 100644
+--- a/init/do_mounts.c
++++ b/init/do_mounts.c
+@@ -32,6 +32,14 @@ int root_mountflags = MS_RDONLY | MS_SILENT;
+ static char __initdata saved_root_name[64];
+ static int root_wait;
+ 
++/********** <b> ES PATCH **********/
++
++static unsigned long __initdata es_fde_part_start;
++static unsigned long __initdata es_fde_part_length;
++static int __initdata es_fde_part_no;
++
++/********** <e> ES PATCH **********/
++
+ dev_t ROOT_DEV;
+ 
+ static int __init load_ramdisk(char *str)
+@@ -182,6 +190,38 @@ static int __init do_mount_root(const char *name, const char *fs,
+ 	return ret;
+ }
+ 
++/********** <b> ES PATCH **********/
++
++static int __init espartstart_setup(char *str)
++{
++	int rc = kstrtoul(str, 10, &es_fde_part_start);
++	if (rc) {
++		printk("ES: failed to parse partition start (rc: %d)\n", rc);
++	}
++	return 1;
++}
++__setup("espartstart=", espartstart_setup);
++
++static int __init espartlength_setup(char *str)
++{
++	int rc = kstrtoul(str, 10, &es_fde_part_length);
++	if (rc) {
++		printk("ES: failed to parse partition length (rc: %d)\n", rc);
++	}
++	return 1;
++}
++__setup("espartlength=", espartlength_setup);
++
++static int __init espartno_setup(char *str)
++{
++	int rc = kstrtoint(str, 10, &es_fde_part_no);
++	if (rc) {
++		printk("ES: failed to parse partition no (rc: %d)\n", rc);
++	}
++	return 1;
++}
++__setup("espartno=", espartno_setup);
++
+ void __init mount_root_generic(char *name, char *pretty_name, int flags)
+ {
+ 	struct page *page = alloc_page(GFP_KERNEL);
+@@ -190,6 +230,30 @@ void __init mount_root_generic(char *name, char *pretty_name, int flags)
+ 	char b[BDEVNAME_SIZE];
+ 	int num_fs, i;
+ 
++	/********** <b> ES PATCH **********/
++
++	int switched = 0; // HOT
++	char c_maj;
++	int maj = 0, min = 0;
++
++	printk("ES: mount_root_generic:\n");
++	printk("        name = %s\n", name);
++	char* root_device_name = saved_root_name;
++
++	if (strncmp(root_device_name, "/dev/", 5) == 0) {
++        root_device_name += 5;
++    }
++
++	if (root_device_name)
++		printk("        root_device_name = %s\n", root_device_name);
++	else
++		printk("        root_device_name = NULL\n");
++
++	if (ROOT_DEV)
++		printk("        ROOT_DEV = 0x%04x\n", ROOT_DEV);
++
++	/********** <e> ES PATCH **********/
++
+ 	scnprintf(b, BDEVNAME_SIZE, "unknown-block(%u,%u)",
+ 		  MAJOR(ROOT_DEV), MINOR(ROOT_DEV));
+ 	if (root_fs_names)
+@@ -215,24 +279,106 @@ void __init mount_root_generic(char *name, char *pretty_name, int flags)
+ 		 * and bad superblock on root device.
+ 		 * and give them a list of the available devices
+ 		 */
+-		printk("VFS: Cannot open root device \"%s\" or %s: error %d\n",
++
++		/********** <b> ES PATCH **********/
++        if (!switched && root_device_name && *root_device_name
++            && strcmp(root_device_name, "/dev/root"))
++        {
++            printk("ES: find root device (%lu - %lu Part(%d)) ...\n", es_fde_part_start, es_fde_part_length, es_fde_part_no);
++
++            if (es_find_partition(es_fde_part_start, es_fde_part_length, es_fde_part_no, &root_device_name))
++            {
++                early_lookup_bdev(root_device_name, &ROOT_DEV);
++                if (strncmp(root_device_name, "/dev/", 5) == 0)
++                    root_device_name += 5;
++
++                printk("        new root_device_name = %s\n", root_device_name);
++
++                if (ROOT_DEV)
++                {
++                    printk("        new ROOT_DEV = 0x%04x\n", ROOT_DEV);
++                    create_dev("/dev/root", ROOT_DEV);
++                    switched = 1;
++                    goto retry;
++                }
++                else
++                {
++                    printk("WARN: ROOT_DEV is NULL!\n");
++                }
++            }
++            else
++            {
++                printk("WARN: es_find_partition failed!\n");
++            }
++
++            printk("ES: switch root device ...\n");
++
++            if      (!strncmp(root_device_name, "hda", 3)) { maj = SCSI_DISK0_MAJOR; min = 0; }       // -> sda = 8,0
++            else if (!strncmp(root_device_name, "hdb", 3)) { maj = SCSI_DISK0_MAJOR; min = 16; }      // -> sdb = 8,16
++            else if (!strncmp(root_device_name, "hdc", 3)) { maj = SCSI_DISK0_MAJOR; min = 32; }      // -> sdc = 8,32
++            else if (!strncmp(root_device_name, "hdd", 3)) { maj = SCSI_DISK0_MAJOR; min = 64; }      // -> sdd = 8,64
++            else if (!strncmp(root_device_name, "sda", 3)) { maj = IDE0_MAJOR; min = 0; }             // -> hda = 3,0
++            else if (!strncmp(root_device_name, "sdb", 3)) { maj = IDE0_MAJOR; min = 64; }            // -> hdb = 3,64
++            else if (!strncmp(root_device_name, "sdc", 3)) { maj = IDE1_MAJOR; min = 0; }             // -> hdc = 22,0
++            else if (!strncmp(root_device_name, "sdd", 3)) { maj = IDE1_MAJOR; min = 64; }            // -> hdd = 22,64
++            else ROOT_DEV = 0x0;
++
++            min += (root_device_name[3] - '0'); // Partition
++            ROOT_DEV = MKDEV(maj, min);
++
++            printk("        new ROOT_DEV = 0x%04x\n", ROOT_DEV);
++
++            switch (maj)
++            {
++			   case SCSI_DISK0_MAJOR:
++				   c_maj = 's';
++				   break;
++			   case IDE0_MAJOR:
++			   case IDE1_MAJOR:
++				   c_maj = 'h';
++				   break;
++			   default:
++				   c_maj = 'x';
++			}
++			if (root_device_name)
++			{
++				root_device_name[0] = c_maj;
++				printk("        new root_device_name = %s\n", root_device_name);
++			}
++			saved_root_name[5] = c_maj;
++			create_dev("/dev/root", ROOT_DEV);
++			switched = 1;
++			goto retry;
++        }
++		else
++		{
++			printk("VFS: Cannot open root device \"%s\" or %s: error %d\n",
+ 				pretty_name, b, err);
+-		printk("Please append a correct \"root=\" boot option; here are the available partitions:\n");
+-		printk_all_partitions();
+-
+-		if (root_fs_names)
+-			num_fs = list_bdev_fs_names(fs_names, PAGE_SIZE);
+-		if (!num_fs)
+-			pr_err("Can't find any bdev filesystem to be used for mount!\n");
+-		else {
+-			pr_err("List of all bdev filesystems:\n");
+-			for (i = 0, p = fs_names; i < num_fs; i++, p += strlen(p)+1)
+-				pr_err(" %s", p);
+-			pr_err("\n");
++			printk("Please append a correct \"root=\" boot option; here are the available partitions:\n");
++			printk_all_partitions();
++
++			if (root_fs_names)
++				num_fs = list_bdev_fs_names(fs_names, PAGE_SIZE);
++			if (!num_fs)
++				pr_err("Can't find any bdev filesystem to be used for mount!\n");
++			else {
++				pr_err("List of all bdev filesystems:\n");
++				for (i = 0, p = fs_names; i < num_fs; i++, p += strlen(p)+1)
++					pr_err(" %s", p);
++				pr_err("\n");
++			}
++
++			panic("VFS: Unable to mount root fs on %s", b);
++		/********** <e> ES PATCH **********/
+ 		}
+-
+-		panic("VFS: Unable to mount root fs on %s", b);
+ 	}
++
+ 	if (!(flags & SB_RDONLY)) {
+ 		flags |= SB_RDONLY;
+ 		goto retry;
+@@ -375,6 +521,7 @@ static void __init mount_block_root(char *root_device_name)
+ 
+ 	if (err < 0)
+ 		pr_emerg("Failed to create /dev/root: %d\n", err);
++	
+ 	mount_root_generic("/dev/root", root_device_name, root_mountflags);
+ }
+ #else

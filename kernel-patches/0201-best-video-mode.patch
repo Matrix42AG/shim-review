@@ -1,0 +1,51 @@
+diff --git a/arch/x86/boot/video.c b/arch/x86/boot/video.c
+index f2e96905b..fb1941dc1 100644
+--- a/arch/x86/boot/video.c
++++ b/arch/x86/boot/video.c
+@@ -134,6 +134,34 @@ static unsigned int get_entry(void)
+ 	return v;
+ }
+ 
++/********** <b> ES PATCH **********/
++static unsigned int mode_best(void)
++{
++	struct card_info *card;
++	int i;
++	u16 best_mode_id = ASK_VGA;
++	u16 best_x = 0;
++	u16 best_y = 0;
++	u16 best_d = 0;
++	for (card = video_cards; card < video_cards_end; card++)
++	{
++		struct mode_info *mi = card->modes;
++		for (i = 0; i < card->nmodes; i++, mi++)
++		{
++			u16 mode_id = mi->mode ? mi->mode : (mi->y << 8)+mi->x;
++			if ((mi->x >= best_x) && (mi->y >= best_y) && (mi->depth >= best_d))
++			{
++			   best_mode_id = mode_id;
++			   best_x = mi->x;
++			   best_y = mi->y;
++			   best_d = mi->depth;
++			}
++		}
++	}
++	return best_mode_id;
++}
++/********** <e> ES PATCH **********/
++
+ static void display_menu(void)
+ {
+ 	struct card_info *card;
+@@ -328,6 +356,11 @@ void set_video(void)
+ 		if (mode == ASK_VGA)
+ 			mode = mode_menu();
+ 
++		/********** <b> ES PATCH **********/
++		if (mode == EXTENDED_VGA)
++			mode = mode_best();
++		/********** <e> ES PATCH **********/
++
+ 		if (!set_mode(mode))
+ 			break;
+ 

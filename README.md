@@ -11,8 +11,8 @@ This repo is for review of requests for signing shim.  To create a request for r
 - file an issue at https://github.com/rhboot/shim-review/issues with a link to your tag
 - approval is ready when the "accepted" label is added to your issue
 
-Note that we really only have experience with using GRUB2 on Linux, so asking
-us to endorse anything else for signing is going to require some convincing on
+Note that we really only have experience with using GRUB2 or systemd-boot on Linux, so
+asking us to endorse anything else for signing is going to require some convincing on
 your part.
 
 Check the docs directory in this repo for guidance on submission and
@@ -71,24 +71,31 @@ like keyserver.ubuntu.com, and preferably have signatures that are reasonably
 well known in the Linux community.)
 
 *******************************************************************************
-### Were these binaries created from the 15.7 shim release tar?
-Please create your shim binaries starting with the 15.7 shim release tar file: https://github.com/rhboot/shim/releases/download/15.7/shim-15.7.tar.bz2
+### Were these binaries created from the 15.8 shim release tar?
+Please create your shim binaries starting with the 15.8 shim release tar file: https://github.com/rhboot/shim/releases/download/15.8/shim-15.8.tar.bz2
 
-This matches https://github.com/rhboot/shim/releases/tag/15.7 and contains the appropriate gnu-efi source.
+This matches https://github.com/rhboot/shim/releases/tag/15.8 and contains the appropriate gnu-efi source.
 
 *******************************************************************************
-Yes, we use 15.7 shim release https://github.com/rhboot/shim/releases/download/15.7/shim-15.7.tar.bz2
+Yes, we use 15.8 shim release https://github.com/rhboot/shim/releases/download/15.8/shim-15.8.tar.bz2
 
 *******************************************************************************
 ### URL for a repo that contains the exact code which was built to get this binary:
 *******************************************************************************
-https://github.com/rhboot/shim/releases/tag/15.7
+https://github.com/rhboot/shim/releases/download/15.8/shim-15.8.tar.bz2
 
 *******************************************************************************
 ### What patches are being applied and why:
 *******************************************************************************
-[We need to check if "loader_str" is an actual path or not](https://github.com/rhboot/shim/commit/fc26b47924e6c46e6391552014fc6b4f716f6e65)
-Reason for the patch: Because our shim is replacing the windows boot loader: bootmgfw.efi, the paramters sent to windows boot loader cannot be considered a path to secondary boot loader. Our default boot loader is set while building the shim.
+https://github.com/Matrix42AG/shim-review/tree/matrix42ag-shim-x64-20240304/patches/0001-bypass_boot_options.patch
+This patch will bypass boot options code.
+
+*******************************************************************************
+### Do you have the NX bit set in your shim? If so, is your entire boot stack NX-compatible and what testing have you done to ensure such compatibility?
+
+See https://techcommunity.microsoft.com/t5/hardware-dev-center/nx-exception-for-shim-community/ba-p/3976522 for more details on the signing of shim without NX bit.
+*******************************************************************************
+Is not set.
 
 *******************************************************************************
 ### If shim is loading GRUB2 bootloader what exact implementation of Secureboot in GRUB2 do you have? (Either Upstream GRUB2 shim_lock verifier or Downstream RHEL/Fedora/Debian/Canonical-like implementation)
@@ -96,39 +103,52 @@ Reason for the patch: Because our shim is replacing the windows boot loader: boo
 GRUB bootloader is not used
 
 *******************************************************************************
-### If shim is loading GRUB2 bootloader and your previously released shim booted a version of grub affected by any of the CVEs in the July 2020 grub2 CVE list, the March 2021 grub2 CVE list, the June 7th 2022 grub2 CVE list, or the November 15th 2022 list, have fixes for all these CVEs been applied?
+### If shim is loading GRUB2 bootloader and your previously released shim booted a version of GRUB2 affected by any of the CVEs in the July 2020, the March 2021, the June 7th 2022, the November 15th 2022, or 3rd of October 2023 GRUB2 CVE list, have fixes for all these CVEs been applied?
 
-* CVE-2020-14372
-* CVE-2020-25632
-* CVE-2020-25647
-* CVE-2020-27749
-* CVE-2020-27779
-* CVE-2021-20225
-* CVE-2021-20233
-* CVE-2020-10713
-* CVE-2020-14308
-* CVE-2020-14309
-* CVE-2020-14310
-* CVE-2020-14311
-* CVE-2020-15705
-* CVE-2021-3418 (if you are shipping the shim_lock module)
-
-* CVE-2021-3695
-* CVE-2021-3696
-* CVE-2021-3697
-* CVE-2022-28733
-* CVE-2022-28734
-* CVE-2022-28735
-* CVE-2022-28736
-* CVE-2022-28737
-
-* CVE-2022-2601
-* CVE-2022-3775
+* 2020 July - BootHole
+  * Details: https://lists.gnu.org/archive/html/grub-devel/2020-07/msg00034.html
+  * CVE-2020-10713
+  * CVE-2020-14308
+  * CVE-2020-14309
+  * CVE-2020-14310
+  * CVE-2020-14311
+  * CVE-2020-15705
+  * CVE-2020-15706
+  * CVE-2020-15707
+* March 2021
+  * Details: https://lists.gnu.org/archive/html/grub-devel/2021-03/msg00007.html
+  * CVE-2020-14372
+  * CVE-2020-25632
+  * CVE-2020-25647
+  * CVE-2020-27749
+  * CVE-2020-27779
+  * CVE-2021-3418 (if you are shipping the shim_lock module)
+  * CVE-2021-20225
+  * CVE-2021-20233
+* June 2022
+  * Details: https://lists.gnu.org/archive/html/grub-devel/2022-06/msg00035.html, SBAT increase to 2
+  * CVE-2021-3695
+  * CVE-2021-3696
+  * CVE-2021-3697
+  * CVE-2022-28733
+  * CVE-2022-28734
+  * CVE-2022-28735
+  * CVE-2022-28736
+  * CVE-2022-28737
+* November 2022
+  * Details: https://lists.gnu.org/archive/html/grub-devel/2022-11/msg00059.html, SBAT increase to 3
+  * CVE-2022-2601
+  * CVE-2022-3775
+* October 2023 - NTFS vulnerabilities
+  * Details: https://lists.gnu.org/archive/html/grub-devel/2023-10/msg00028.html, SBAT increase to 4
+  * CVE-2023-4693
+  * CVE-2023-4692
 *******************************************************************************
 GRUB bootloader is not used
 
 *******************************************************************************
-### If these fixes have been applied, have you set the global SBAT generation on your GRUB binary to 3?
+### If shim is loading GRUB2 bootloader, and if these fixes have been applied, is the upstream global SBAT generation in your GRUB2 binary set to 4?
+The entry should look similar to: `grub,4,Free Software Foundation,grub,GRUB_UPSTREAM_VERSION,https://www.gnu.org/software/grub/`
 *******************************************************************************
 GRUB bootloader is not used
 
@@ -146,21 +166,24 @@ GRUB bootloader is not used.
 ### Is upstream commit [75b0cea7bf307f362057cc778efe89af4c615354 "ACPI: configfs: Disallow loading ACPI tables when locked down"](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=75b0cea7bf307f362057cc778efe89af4c615354) applied?
 ### Is upstream commit [eadb2f47a3ced5c64b23b90fd2a3463f63726066 "lockdown: also lock down previous kgdb use"](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eadb2f47a3ced5c64b23b90fd2a3463f63726066) applied?
 *******************************************************************************
-We are currently running Kernel version 5.5.7. Our intention is to upgrade to the latest kernel version and apply the most recent security patches. However, our current priority is to address the issue involving a certificate mismatch under the shim. Resolving this problem is crucial for unblocking our clients.
-
-It's worth noting that we only utilize the Linux kernel to display a login dialog for user authentication, allowing them to proceed to boot into Windows. We do not grant shell access or permit any actions that involve modifying kernel modules or similar activities.
-
+We've upgraded to Linux 6.6.9 which has the all the required patches to enforce the secure boot.
 
 *******************************************************************************
 ### Do you build your signed kernel with additional local patches? What do they do?
 *******************************************************************************
-We build and sign linux kernel locally. No additional local patches.
+We build and sign linux kernel locally. 
+We have five local patches: https://github.com/Matrix42AG/shim-review/tree/matrix42ag-shim-x64-20240304/kernel-patches/
+- 0001-disable-expert-selects-debug.patch - will disable DEBUG_KERNEL option from menuconfig
+- 0100-cpsd-realmode.patch - will enable export for machine_real_restart without having to enable CONFIG_APM_MODULE kernel module
+- 0101-cpsd-video.patch - Check the state of the framebuffer (0000:f000)
+- 0201-best-video-mode.patch - will attempt to enable best mode when EXTENDED_VGA is enabled.
+- 0202-bootdev.patch - sets up three init parameters that our loader uses to pass on to the kernel: es_fde_part_start, es_fde_part_length, es_fde_part_no. We use this information to find and mount the right partition.
 
 *******************************************************************************
 ### Do you use an ephemeral key for signing kernel modules?
 ### If not, please describe how you ensure that one kernel build does not load modules built for another kernel.
 *******************************************************************************
-We do not employ ephemeral keys. Our practice does not involve granting shell access to the kernel. Instead, we utilize a minimal kernel configuration with a login dialog exclusively for user authentication purposes.
+When building the kernel, a ephemeral key is generated and signed
 
 *******************************************************************************
 ### If you use vendor_db functionality of providing multiple certificates and/or hashes please briefly describe your certificate setup.
@@ -189,16 +212,15 @@ This should include logs for creating the buildroots, applying patches, doing th
 build.log
 
 *******************************************************************************
-### What changes were made since your SHIM was last signed?
+### What changes were made in the distro's secure boot chain since your SHIM was last signed?
+For example, signing new kernel's variants, UKI, systemd-boot, new certs, new CA, etc..
 *******************************************************************************
-`Update shim version to 15.7`
-We're not making changes to the shim, we download the source and build it using the option for VENDOR_CERT_FILE and DEFAULT_LOADER.
-We're updating the vendor EV certificate because the last certificate has expired.
+We switched to shim-15.8 added a new vendor certificate (because the old one was expired) and updated .sbat
 
 *******************************************************************************
 ### What is the SHA256 hash of your final SHIM binary?
 *******************************************************************************
-50501d79a8ecc1648ed4418e5a35207feb08b797f4387ab1876e7e29abdc0b51 (sha256sum shim.efi)
+7409c799415b69dfc6222a844b072f79aa14f5b57f1bea07a442c17d74390b33
 
 *******************************************************************************
 ### How do you manage and protect the keys used in your SHIM?
@@ -208,25 +230,34 @@ The private key, associated with the vendor EV certificate build with the shim, 
 *******************************************************************************
 ### Do you use EV certificates as embedded certificates in the SHIM?
 *******************************************************************************
-Yes.
+Yes
 
 *******************************************************************************
-### Do you add a vendor-specific SBAT entry to the SBAT section in each binary that supports SBAT metadata ( grub2, fwupd, fwupdate, shim + all child shim binaries )?
-### Please provide exact SBAT entries for all SBAT binaries you are booting or planning to boot directly through shim.
+### Do you add a vendor-specific SBAT entry to the SBAT section in each binary that supports SBAT metadata ( GRUB2, fwupd, fwupdate, systemd-boot, systemd-stub, shim + all child shim binaries )?
+### Please provide exact SBAT entries for all shim binaries as well as all SBAT binaries that shim will directly boot.
 ### Where your code is only slightly modified from an upstream vendor's, please also preserve their SBAT entries to simplify revocation.
+If you are using a downstream implementation of GRUB2 or systemd-boot (e.g.
+from Fedora or Debian), please preserve the SBAT entry from those distributions
+and only append your own. More information on how SBAT works can be found
+[here](https://github.com/rhboot/shim/blob/main/SBAT.md).
 *******************************************************************************
 shim.egosecure,1,Matrix42 GmbH,shim,15.7,https://matrix42.com
 
 *******************************************************************************
-### Which modules are built into your signed grub image?
+### If shim is loading GRUB2 bootloader, which modules are built into your signed GRUB2 image?
 *******************************************************************************
 GRUB bootloader is not used.
 
 *******************************************************************************
-### What is the origin and full version number of your bootloader (GRUB or other)?
+### If you are using systemd-boot on arm64 or riscv, is the fix for [unverified Devicetree Blob loading](https://github.com/systemd/systemd/security/advisories/GHSA-6m6p-rjcq-334c) included?
 *******************************************************************************
 GRUB bootloader is not used.
 We have a custom boot loader.
+
+*******************************************************************************
+### What is the origin and full version number of your bootloader (GRUB2 or systemd-boot or other)?
+*******************************************************************************
+[your text here]
 
 *******************************************************************************
 ### If your SHIM launches any other components, please provide further details on what is launched.
@@ -235,7 +266,7 @@ The shim loads our custom loader (the DEFAULT_LOADER provided to the shim). We u
 To start the loader we create our own EFI boot entry.  
 
 *******************************************************************************
-### If your GRUB2 launches any other binaries that are not the Linux kernel in SecureBoot mode, please provide further details on what is launched and how it enforces Secureboot lockdown.
+### If your GRUB2 or systemd-boot launches any other binaries that are not the Linux kernel in SecureBoot mode, please provide further details on what is launched and how it enforces Secureboot lockdown.
 *******************************************************************************
 GRUB bootloader is not used.
 
@@ -245,21 +276,18 @@ GRUB bootloader is not used.
 All our components are signed with our vendor EV certificate.
 
 *******************************************************************************
-### Does your SHIM load any loaders that support loading unsigned kernels (e.g. GRUB)?
+### Does your SHIM load any loaders that support loading unsigned kernels (e.g. GRUB2)?
 *******************************************************************************
 No.
 
 *******************************************************************************
 ### What kernel are you using? Which patches does it includes to enforce Secure Boot?
 *******************************************************************************
-Linux kernel 5.5.7, which has the all the required patches to enforce the secure boot.
-
-We are currently running Kernel version 5.5.7. Our intention is to upgrade to the latest kernel version and apply the most recent security patches. However, our current priority is to address the issue involving a certificate mismatch under the shim. Resolving this problem is crucial for unblocking our clients.
-
-It's worth noting that we only utilize the Linux kernel to display a login dialog for user authentication, allowing them to proceed to boot into Windows. We do not grant shell access or permit any actions that involve modifying kernel modules or similar activities.
+Linux Kernel: 6.6.9. (this is the latest stable release)
+Includes the latest security patches.
 
 *******************************************************************************
 ### Add any additional information you think we may need to validate this shim.
 *******************************************************************************
 file: shim.efi  
-sha256: 50501d79a8ecc1648ed4418e5a35207feb08b797f4387ab1876e7e29abdc0b51
+sha256: 7409c799415b69dfc6222a844b072f79aa14f5b57f1bea07a442c17d74390b33
