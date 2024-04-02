@@ -240,7 +240,17 @@ from Fedora or Debian), please preserve the SBAT entry from those distributions
 and only append your own. More information on how SBAT works can be found
 [here](https://github.com/rhboot/shim/blob/main/SBAT.md).
 *******************************************************************************
-shim.egosecure,1,Matrix42 GmbH,shim,15.8,https://matrix42.com
+shim sbat (objcopy --only-section .sbat -O binary shim.efi /dev/stdout): 
+> sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
+> 
+> shim,4,UEFI shim,shim,1,https://github.com/rhboot/shim
+> 
+> shim.egosecure,1,Matrix42 GmbH,shim,15.8,https://matrix42.com
+
+Second stage boot loader sbat (objcopy --only-section .sbat -O binary esbootmg.efi /dev/stdout):
+> sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
+> 
+> esbootmg,1,Matrix42 GmbH,FDE,1,https://matrix42.com
 
 *******************************************************************************
 ### If shim is loading GRUB2 bootloader, which modules are built into your signed GRUB2 image?
