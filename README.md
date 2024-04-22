@@ -173,11 +173,16 @@ We've upgraded to Linux 6.6.9 which has the all the required patches to enforce 
 *******************************************************************************
 We build and sign linux kernel locally. 
 We have five local patches: https://github.com/Matrix42AG/shim-review/tree/matrix42ag-shim-x64-20240304/kernel-patches/
-- 0001-disable-expert-selects-debug.patch - will disable DEBUG_KERNEL option from menuconfig
-- 0100-cpsd-realmode.patch - will enable export for machine_real_restart without having to enable CONFIG_APM_MODULE kernel module
-- 0101-cpsd-video.patch - Check the state of the framebuffer (0000:f000)
-- 0201-best-video-mode.patch - will attempt to enable best mode when EXTENDED_VGA is enabled.
-- 0202-bootdev.patch - sets up three init parameters that our loader uses to pass on to the kernel: es_fde_part_start, es_fde_part_length, es_fde_part_no. We use this information to find and mount the right partition.
+
+•	0001-disable-expert-selects-debug.patch - will disable DEBUG_KERNEL option from menuconfig
+
+•	0100-cpsd-realmode.patch - will enable export for machine_real_restart without having to enable CONFIG_APM_MODULE kernel module
+
+•	0101-cpsd-video.patch: In summary the code will check if a specific value is stored at memory address 0xf000, if it's not, it attempts to set a VESA video mode using BIOS interrupts and checks if the operation was successful by inspecting the return value in the ax register. We're first initializing a register using initregs(&ireg), then we're initializing the ax under the register structure with 0x4f02 <- this value is used for BIOS videos services interrupt calls. Setting the bx value of the register structure to "vesa_mode" is used to the VESA video mode value. Using these setting we can use initcall to make a BIOS interrupt call at 0x10 in order to set the video mode VBE (VESA BIOS Extensions). In the end if this operation fails we simply return -1.
+
+•	0201-best-video-mode.patch - The patch will attempt to enable best mode when EXTENDED_VGA is enabled. The mode_best() function iterates over available video modes to find the best one based on resolution and color depth. If we're in EXTENDED_VGA mode then we're updating the mode variable with the best mode ID.
+
+•	0202-bootdev.patch - sets up three init parameters that our loader uses to pass on to the kernel: es_fde_part_start, es_fde_part_length, es_fde_part_no. We use this information to find and mount the right partition. Finding the right partition is done via this function: es_find_partition. The function is basically a copy of the printk_all_partitions which is part of the kernel by default. The function will basically iterate over the available partitions and will compare the start sector value and number of sectors of each partition found with the given part_start and part_lenght in order to find the designated partition we want to use for the ego_secure partition.
 
 *******************************************************************************
 ### Do you use an ephemeral key for signing kernel modules?
