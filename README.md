@@ -257,6 +257,12 @@ Second stage boot loader sbat (objcopy --only-section .sbat -O binary esbootmg.e
 > 
 > esbootmg,1,Matrix42 GmbH,FDE,1,https://matrix42.com
 
+objcopy --only-section .sbat -O binary esboot.efi /dev/stdout
+> sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
+> 
+> esboot,1,Matrix42 GmbH,FDE,1,https://matrix42.com
+
+
 *******************************************************************************
 ### If shim is loading GRUB2 bootloader, which modules are built into your signed GRUB2 image?
 *******************************************************************************
